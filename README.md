@@ -13,7 +13,7 @@ Setup of a GenStage application almost exactly as defined in the module document
 - Exmaple.C: consumer
 
 With the settings defined here, output will be:
-
+```
   Application started
   Initalised Producer A with counter at 0
   Initalised Producer/Consumer B with multiplier 2
@@ -35,9 +35,10 @@ With the settings defined here, output will be:
   Producer A handling demand of 1 with 4
   Consumer C handling events
   [6]
+```
 
 With Example.B max_demand: 1, Example.C max_demand: 2 it becomes:
-
+```
   Application started
   Initalised Producer A with counter at 0
   Initalised Producer/Consumer B with multiplier 2
@@ -59,9 +60,10 @@ With Example.B max_demand: 1, Example.C max_demand: 2 it becomes:
   [4]
   Consumer C handling events
   [6]
+```
 
 With Example.B max_demand: 2, Example.C max_demand: 2 it becomes:
-
+```
   Application started
   Initalised Producer A with counter at 0
   Initalised Producer/Consumer B with multiplier 2
@@ -75,6 +77,7 @@ With Example.B max_demand: 2, Example.C max_demand: 2 it becomes:
   Producer A handling demand of 2 with 4
   Consumer C handling events
   [4, 6]
+```
 
 ## example-step-2-subscribing
 By using named processes, each stage automatically subscribes to the upstream stage.
@@ -86,17 +89,18 @@ The stages are now launched under a supervision tree. Killing Example.B still ki
 
 ## example-step-4-supervisor-arguments
 As a first step to making the pipeline configurable, arguments are passed to the individual stages from the application, via the supervisor. At this point is not possible to launch multiple pipelines reading from the same consumer, because the process name "Example.B" has already been taken.
-
+```
   ** (Mix) Could not start application palleto: Palleto.start(:normal, []) returned an error: shutdown: failed to start child: 2
       ** (EXIT) shutdown: failed to start child: Example.B
           ** (EXIT) already started: #PID<0.153.0>
+```
 
 ## example-step-5-multiple-pipelines
 By passing the pipeline name into each pipeline, a unique name can be created for the stages in each pipeline, and they are still discoverable by their subscriber. It is now possible to have pipelines that process the data at different rates.
 
 ## example-step-6-configurable-demand
 Demand for each pipeline is now set independently. Adjust this to see the change in output. A warning is generated if the demand in the second pipeline is higher than the first; this warning does not occur id the order of the pipelines is switched.
-
+```
   Initalised Producer A with counter at 0
   Example.Supervisor FastPipeline 1000
   Start Example.B as FastPipelineB
@@ -134,4 +138,4 @@ Demand for each pipeline is now set independently. Adjust this to see the change
   Producer/Consumer B incrementing 1 events
   Producer A handling demand of 1 with 11
   SlowPipeline: 2, 4, 6
-
+```
