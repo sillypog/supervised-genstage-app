@@ -1,18 +1,11 @@
 defmodule Palleto do
   @moduledoc """
-  Now that we have named and configurable pipelines, we can start
-  multiple producer/consumer and consumer units to read from
-  our producer at different rates.
+  What if each pipeline makes different demands on the producer?
 
-  For this to work, we need to ensure that the producer/consumers
-  in each pipeline are launched with different names. Those names
-  still need to be discoverable by the consumer in that pipeline.
-
-  To do that, the pipeline name is passed to the supervisors and
-  used to construct a modified name for each process, using the
-  name of the pipeline and the module.
+  The supervisor has been modified to take demand as a parameter.
+  This is set as max_demand on both the producer/consumer and
+  consumer.
   """
-
   use Application
 
   def start(_type, _args) do
@@ -20,8 +13,8 @@ defmodule Palleto do
 
     children = [
       worker(Example.A, [0]),
-      supervisor(Example.Supervisor, ["FastPipeline", 1000], id: 1),
-      supervisor(Example.Supervisor, ["SlowPipeline", 5000], id: 2)
+      supervisor(Example.Supervisor, ["FastPipeline", 1000, 1], id: 1),
+      supervisor(Example.Supervisor, ["SlowPipeline", 5000, 3], id: 2)
     ]
 
     opts = [strategy: :one_for_one, name: ApplicationSupervisor]
