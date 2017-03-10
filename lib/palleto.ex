@@ -1,29 +1,27 @@
 defmodule Palleto do
   @moduledoc """
-  Here we are using a self-assembling pipeline.
+  Our pipeline is now being supervised.
 
-  The pipeline stages are no longer being subscribed in a central location.
-  Instead, each stage subscribes itself to the preceding stage.
+  The producer is supervised as a single worker.
+  The producer/consumer and consumer are in a separate supervision tree.
 
-  To make this simple, the producer and producer/consumer are being
-  started as named processes.
+  Later, this will allow us to scale the downstream steps of the pipeline
+  as an independent unit.
 
-  What happens if one of the stages crashes?
+  If a stage dies, a new process is launched and processing continues.
   """
 
   use Application
 
   def start(_type, _args) do
-    IO.puts "Application started"
+    import Supervisor.Spec
 
-    {:ok, _a} = Example.A.start_link(0)
-    {:ok, _b} = Example.B.start_link(2)
-    {:ok, _c} = Example.C.start_link
+    children = [
+      worker(Example.A, [0]),
+      supervisor(Example.Supervisor, [])
+    ]
 
-    # We are now having each stage subscribe itself
-    # GenStage.sync_subscribe(c, to: b, min_demand: 0, max_demand: 1)
-    # GenStage.sync_subscribe(b, to: a, min_demand: 0, max_demand: 1)
-
-    Task.start(fn() -> :timer.sleep(60000) end)
+    opts = [strategy: :one_for_one, name: ApplicationSupervisor]
+    Supervisor.start_link(children, opts)
   end
 end

@@ -5,7 +5,6 @@ defmodule Example.B do
   # Client API
   ##########
   def start_link(multiplier) do
-     # Start as a named process so consumers can subscribe themselves
     GenStage.start_link(__MODULE__, multiplier, name: __MODULE__)
   end
 
@@ -16,7 +15,6 @@ defmodule Example.B do
 
   def init(multiplier) do
     IO.puts "Initalised Producer/Consumer B with multiplier #{multiplier}"
-    # Subscribe to the named producer process when starting
     {:producer_consumer, multiplier, subscribe_to: [{Example.A, min_demand: 0, max_demand: 1}]}
   end
 

@@ -5,7 +5,6 @@ defmodule Example.A do
   # Client API
   ##########
   def start_link(counter) do
-    # Start as a named process so consumers can subscribe themselves
     GenStage.start_link(__MODULE__, counter, name: __MODULE__)
   end
 
@@ -21,7 +20,6 @@ defmodule Example.A do
 
   def handle_demand(demand, counter) when demand > 0 do
     IO.puts "Producer A handling demand of #{demand} with #{counter}"
-
     events = Enum.to_list(counter..counter+demand-1)
     {:noreply, events, counter + demand}
   end
