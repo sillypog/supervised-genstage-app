@@ -1,17 +1,20 @@
 defmodule Example.Supervisor do
   use Supervisor
 
-  def start_link do
-    Supervisor.start_link(__MODULE__, :ok)
+  def start_link(name, consumer_delay) do
+    IO.puts "Example.Supervisor #{name} #{consumer_delay}"
+    Supervisor.start_link(__MODULE__, [name, consumer_delay])
   end
 
-  def init(:ok) do
+  def init([name, consumer_delay]) do
+    # Launch the consumer with the delay we received from the application
     children = [
-      worker(Example.B, [2]),   # We're still multiplying the input by 2
-      worker(Example.C, [1000]) # The delay has been parameterized. Set to 1 second
+      worker(Example.B, [2]),
+      worker(Example.C, [consumer_delay])
     ]
 
-    opts = [strategy: :one_for_one, name: Example.Supervisor]
+    # Launch the supervisor with the name we received from the application
+    opts = [strategy: :one_for_one, name: name]
     supervise(children, opts)
   end
 end
