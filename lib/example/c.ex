@@ -1,11 +1,16 @@
 defmodule Example.C do
+  @moduledoc """
+  The only change here is that the delay in each round
+  of consumption is now configurable.
+  """
+
   use GenStage
 
   ##########
   # Client API
   ##########
-  def start_link do
-    GenStage.start_link(__MODULE__, :ok)
+  def start_link(delay) do
+    GenStage.start_link(__MODULE__, delay)
   end
 
 
@@ -13,17 +18,17 @@ defmodule Example.C do
   # Server callbacks
   ##########
 
-  def init(:ok) do
+  def init(delay) do
     IO.puts "Initialized Consumer C"
-    # Subscribe to the named producer/consumer process when starting
-    {:consumer, :the_state_does_not_matter, subscribe_to: [{Example.B, min_demand: 0, max_demand: 1}]}
+    {:consumer, delay, subscribe_to: [{Example.B, min_demand: 0, max_demand: 1}]}
   end
 
   def handle_events(events, _from, state) do
-    :timer.sleep(1000)
+    :timer.sleep(state)
 
     IO.inspect(events)
 
+    # Consumers don't emit events
     {:noreply, [], state}
   end
 end
