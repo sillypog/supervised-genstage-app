@@ -6,15 +6,15 @@ defmodule Example.Supervisor do
     Supervisor.start_link(__MODULE__, [name, consumer_delay])
   end
 
-  def init([name, consumer_delay]) do
-    # Launch the consumer with the delay we received from the application
+  def init([pipeline_name, consumer_delay]) do
+    # Pass the pipeline name to the children so they can build
+    # their names dynamically to avoid collisions
     children = [
-      worker(Example.B, [2]),
-      worker(Example.C, [consumer_delay])
+      worker(Example.B, [pipeline_name, 2]),
+      worker(Example.C, [pipeline_name, consumer_delay])
     ]
 
-    # Launch the supervisor with the name we received from the application
-    opts = [strategy: :one_for_one, name: name]
+    opts = [strategy: :one_for_one, name: pipeline_name]
     supervise(children, opts)
   end
 end
