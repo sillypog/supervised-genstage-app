@@ -4,8 +4,12 @@ defmodule Example.B do
   ##########
   # Client API
   ##########
-  def start_link(multiplier) do
-    GenStage.start_link(__MODULE__, multiplier, name: __MODULE__)
+  def start_link(pipeline_name, multiplier) do
+    # Build the process name from the pipeline and module names
+    process_name = Enum.join([pipeline_name, "B"], "")
+    IO.puts "Start Example.B as #{process_name}"
+    # Launch the process with the dynamically generated name
+    GenStage.start_link(__MODULE__, multiplier, name: String.to_atom(process_name))
   end
 
 
