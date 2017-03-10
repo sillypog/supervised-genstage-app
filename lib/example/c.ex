@@ -15,17 +15,15 @@ defmodule Example.C do
 
   def init(:ok) do
     IO.puts "Initialized Consumer C"
-    {:consumer, :the_state_does_not_matter}
+    # Subscribe to the named producer/consumer process when starting
+    {:consumer, :the_state_does_not_matter, subscribe_to: [{Example.B, min_demand: 0, max_demand: 1}]}
   end
 
   def handle_events(events, _from, state) do
-    # Slow things down so we can follow the output
     :timer.sleep(1000)
 
-    IO.puts "Consumer C handling events"
     IO.inspect(events)
 
-    # Consumers don't emit events
     {:noreply, [], state}
   end
 end
