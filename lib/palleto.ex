@@ -1,16 +1,16 @@
 defmodule Palleto do
   @moduledoc """
-  Our pipeline is now being supervised.
+  Now that the pipeline is supervised, how can it be manipulated?
 
-  The producer is supervised as a single worker.
-  The producer/consumer and consumer are in a separate supervision tree.
+  Here we are passing arguments to the supervisor and workers
+  from the application.
 
-  Later, this will allow us to scale the downstream steps of the pipeline
-  as an independent unit.
+  The name of the supervisor process is being passed as the first argument.
+  The delay for the consumer process is being passed as the second argument,
+  and will be passed from the supervisor to the consumer.
 
-  If a stage dies, a new process is launched and processing continues.
+  What if we try to bring up a second consumer supervisor?
   """
-
   use Application
 
   def start(_type, _args) do
@@ -18,7 +18,7 @@ defmodule Palleto do
 
     children = [
       worker(Example.A, [0]),
-      supervisor(Example.Supervisor, [])
+      supervisor(Example.Supervisor, ["Pipeline", 100], id: 1)
     ]
 
     opts = [strategy: :one_for_one, name: ApplicationSupervisor]

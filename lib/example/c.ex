@@ -1,9 +1,4 @@
 defmodule Example.C do
-  @moduledoc """
-  The only change here is that the delay in each round
-  of consumption is now configurable.
-  """
-
   use GenStage
 
   ##########
@@ -28,7 +23,6 @@ defmodule Example.C do
 
     IO.inspect(events)
 
-    # Consumers don't emit events
     {:noreply, [], state}
   end
 end
