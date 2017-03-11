@@ -2,7 +2,7 @@
 
 An example of a supervised Elixir GenStage application.
 
-This is the example application I presented at the Erlang & Elixir SF meetup at Pinterest on 2/22/17.
+This is the example application I presented at the Erlang & Elixir SF meetup at Pinterest on 2/22/17. Slides are at [http://sillypog.com/elixir-meetup-0217-genstage](http://sillypog.com/elixir-meetup-0217-genstage).
 
 I have broken the application down into various steps. Comments within the code at each step indicate what has changed and why, and include prompts to make further modifications within that step to explore GenStage behaviour. Each step is a separate git branch.
 
