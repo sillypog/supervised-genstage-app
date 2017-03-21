@@ -23,7 +23,7 @@ defmodule Example.C do
     :timer.sleep(1000)
 
     IO.puts "Consumer C handling events"
-    IO.inspect(events)
+    IO.inspect(events, char_lists: false)
 
     # Consumers don't emit events
     {:noreply, [], state}
