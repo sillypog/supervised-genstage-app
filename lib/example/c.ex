@@ -26,7 +26,7 @@ defmodule Example.C do
   def handle_events(events, _from, state) do
     :timer.sleep(state)
 
-    IO.inspect(events)
+    IO.inspect(events, char_lists: false)
 
     # Consumers don't emit events
     {:noreply, [], state}
