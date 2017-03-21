@@ -22,7 +22,7 @@ defmodule Example.C do
   def handle_events(events, _from, state) do
     :timer.sleep(1000)
 
-    IO.inspect(events)
+    IO.inspect(events, char_lists: false)
 
     {:noreply, [], state}
   end
