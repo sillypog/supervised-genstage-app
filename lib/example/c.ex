@@ -13,16 +13,19 @@ defmodule Example.C do
   # Server callbacks
   ##########
 
+  @impl GenStage
   def init(:ok) do
     IO.puts "Initialized Consumer C"
     # Subscribe to the named producer/consumer process when starting
     {:consumer, :the_state_does_not_matter, subscribe_to: [{Example.B, min_demand: 0, max_demand: 1}]}
   end
 
+  @impl GenStage
   def handle_events(events, _from, state) do
     :timer.sleep(1000)
 
-    IO.inspect(events, char_lists: false)
+    IO.write("Consumer C handling events: ")
+    IO.inspect(events, charlists: false)
 
     {:noreply, [], state}
   end
