@@ -13,11 +13,13 @@ defmodule Example.B do
   # Server callbacks
   ##########
 
+  @impl GenStage
   def init(multiplier) do
     IO.puts "Initalised Producer/Consumer B with multiplier #{multiplier}"
     {:producer_consumer, multiplier}
   end
 
+  @impl GenStage
   def handle_events(events, _from, multiplier) do
     IO.puts "Producer/Consumer B incrementing #{length events} events"
     events = Enum.map(events, & &1 * multiplier)

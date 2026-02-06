@@ -13,11 +13,13 @@ defmodule Example.A do
   # Server callbacks
   ##########
 
+  @impl GenStage
   def init(counter) do
     IO.puts "Initalised Producer A with counter at #{counter}"
     {:producer, counter}
   end
 
+  @impl GenStage
   def handle_demand(demand, counter) when demand > 0 do
     IO.puts "Producer A handling demand of #{demand} with #{counter}"
     # If the counter is 3 and we ask for 2 items, we will
