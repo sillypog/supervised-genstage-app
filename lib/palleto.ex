@@ -9,12 +9,10 @@ defmodule Palleto do
   use Application
 
   def start(_type, _args) do
-    import Supervisor.Spec
-
     children = [
-      worker(Example.A, [0]),
-      supervisor(Example.Supervisor, ["FastPipeline", 1000, 1], id: 1),
-      supervisor(Example.Supervisor, ["SlowPipeline", 5000, 3], id: 2)
+      {Example.A, [0]},
+      {Example.Supervisor, ["FastPipeline", 1000, 1]},
+      {Example.Supervisor, ["SlowPipeline", 5000, 3]}
     ]
 
     opts = [strategy: :one_for_one, name: ApplicationSupervisor]
